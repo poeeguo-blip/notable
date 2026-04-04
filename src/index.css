@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Warm, literary aesthetic */
+    --background: 35 25% 97%;
+    --foreground: 25 35% 15%;
+
+    --card: 35 35% 98%;
+    --card-foreground: 25 35% 15%;
+
+    --popover: 35 35% 98%;
+    --popover-foreground: 25 35% 15%;
+
+    --primary: 145 25% 45%;
+    --primary-foreground: 35 25% 97%;
+
+    --secondary: 35 20% 92%;
+    --secondary-foreground: 25 35% 15%;
+
+    --muted: 35 15% 93%;
+    --muted-foreground: 25 15% 45%;
+
+    --accent: 145 30% 88%;
+    --accent-foreground: 145 35% 25%;
+
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 35 25% 97%;
+
+    --border: 35 20% 88%;
+    --input: 35 20% 90%;
+    --ring: 145 25% 45%;
+
+    --radius: 0.5rem;
+    
+    /* Custom design tokens */
+    --gradient-subtle: linear-gradient(135deg, hsl(35 25% 97%) 0%, hsl(35 20% 95%) 100%);
+    --shadow-soft: 0 2px 8px -2px hsl(25 35% 15% / 0.08);
+    --shadow-medium: 0 4px 16px -4px hsl(25 35% 15% / 0.12);
+    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 25 35% 8%;
+    --foreground: 35 25% 95%;
+
+    --card: 25 30% 10%;
+    --card-foreground: 35 25% 95%;
+
+    --popover: 25 30% 10%;
+    --popover-foreground: 35 25% 95%;
+
+    --primary: 145 35% 55%;
+    --primary-foreground: 25 35% 8%;
+
+    --secondary: 25 25% 15%;
+    --secondary-foreground: 35 25% 95%;
+
+    --muted: 25 20% 15%;
+    --muted-foreground: 35 15% 60%;
+
+    --accent: 145 30% 20%;
+    --accent-foreground: 145 35% 85%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 35 25% 95%;
+
+    --border: 25 20% 20%;
+    --input: 25 20% 18%;
+    --ring: 145 35% 55%;
+    
+    --gradient-subtle: linear-gradient(135deg, hsl(25 35% 8%) 0%, hsl(25 30% 10%) 100%);
+    --shadow-soft: 0 2px 8px -2px hsl(0 0% 0% / 0.3);
+    --shadow-medium: 0 4px 16px -4px hsl(0 0% 0% / 0.4);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-weight: 600;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+/* Toggle/spoiler text styles */
+.toggle-hidden {
+  background-color: hsl(var(--muted-foreground));
+  color: transparent;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 2px;
+  user-select: none;
+}
+
+.toggle-visible {
+  background-color: hsl(var(--accent));
+  color: inherit;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.ProseMirror p {
+  margin: 0;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-family: 'Crimson Text', Georgia, serif;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-family: 'Crimson Text', Georgia, serif;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-family: 'Crimson Text', Georgia, serif;
+}
+
+.ProseMirror ul {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+  list-style-type: disc;
+}
+
+.ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+  list-style-type: decimal;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+  display: list-item;
+}
+
+.ProseMirror li p {
+  margin: 0;
+  display: inline;
+}
+
+.ProseMirror a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  opacity: 0.8;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+  width: auto;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: opacity 0.2s;
+  display: inline-block;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror img:hover {
+  opacity: 0.8;
+}
+
+/* Dictionary definition styles - force small size even in headings */
+.ProseMirror .inline-definition,
+.ProseMirror h1 .inline-definition,
+.ProseMirror h2 .inline-definition,
+.ProseMirror h3 .inline-definition {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: normal !important;
+  font-family: 'Inter', sans-serif !important;
+  color: #888 !important;
+  background: #f0f0f0 !important;
+  padding: 1px 4px !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  display: inline !important;
+  vertical-align: middle !important;
+}
+
+.dark .ProseMirror .inline-definition,
+.dark .ProseMirror h1 .inline-definition,
+.dark .ProseMirror h2 .inline-definition,
+.dark .ProseMirror h3 .inline-definition {
+  background: #333 !important;
+  color: #aaa !important;
+}
+
+/* Vocabulary summary section */
+.ProseMirror .vocab-summary {
+  margin-top: 24px;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  border-left: 3px solid hsl(145 25% 45%);
+  border-radius: 4px;
+}
+
+.ProseMirror .vocab-summary h4 {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin: 0 0 8px 0 !important;
+  color: #333 !important;
+}
+
+.ProseMirror .vocab-summary ul {
+  margin: 0 !important;
+  padding-left: 16px !important;
+}
+
+.ProseMirror .vocab-summary li {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+  color: #555 !important;
+  margin: 4px 0 !important;
+}
+
+.dark .ProseMirror .vocab-summary {
+  background: #1a1a1a;
+  border-left-color: hsl(145 35% 55%);
+}
+
+.dark .ProseMirror .vocab-summary h4 {
+  color: #eee !important;
+}
+
+.dark .ProseMirror .vocab-summary li {
+  color: #bbb !important;
+}
