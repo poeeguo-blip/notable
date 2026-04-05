@@ -537,76 +537,42 @@ ${notesHtml}
   }
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-background">
-      {/* Desktop Layout - Side by side */}
-      <div className="hidden md:flex flex-1 overflow-hidden">
-        ...（桌面版本代碼）
-      </div>
-
-      {/* Mobile Layout - Fullscreen Note Editor */}
-      <div className="md:hidden flex flex-col flex-1 overflow-hidden">
-        {selectedNote ? (
-          <>
-            {/* Mobile Header - Only when viewing note */}
-            <div className="flex items-center gap-2 px-3 py-3 border-b bg-background h-14">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setSelectedNote(null)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
-              </Button>
-              <h2 className="text-sm font-semibold flex-1 truncate">{selectedNote.title || "Untitled"}</h2>
-            </div>
-            
-            {/* Fullscreen Note Editor */}
-            <div className="flex-1 overflow-hidden">
-              <NoteEditor
-                note={selectedNote}
-                onSave={handleNoteSave}
-                onLogout={handleLogout}
-                saving={saving}
-                onRestore={handleNoteSave}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Mobile List View Header */}
-            <div className="flex items-center gap-2 px-3 py-3 border-b bg-background h-14">
-              <h1 className="text-lg font-semibold">Notes</h1>
-            </div>
-            
-            {/* Notes List */}
-            <div className="flex-1 overflow-hidden">
-              <NotesList
-                notes={notes}
-                folders={folders}
-                trashedNotes={trashedNotes}
-                showTrash={showTrash}
-                onShowTrashChange={setShowTrash}
-                selectedNoteId={selectedNote?.id || null}
-                onNoteSelect={setSelectedNote}
-                onNoteCreate={handleNoteCreate}
-                onNoteDelete={handleNoteDelete}
-                onNoteRestore={handleNoteRestore}
-                onNotePermanentDelete={handleNotePermanentDelete}
-                onFolderCreate={handleFolderCreate}
-                onFolderRename={handleFolderRename}
-                onFolderDelete={handleFolderDelete}
-                onNoteMoveToFolder={handleNoteMoveToFolder}
-                onFolderReorder={handleFolderReorder}
-                onNoteToggleFavorite={handleNoteToggleFavorite}
-                onNoteReorder={handleNoteReorder}
-                onExportAll={handleExportAll}
-              />
-            </div>
-          </>
-        )}
-      </div>
+    <div className="h-screen overflow-hidden">
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+          <NotesList
+            notes={notes}
+            folders={folders}
+            trashedNotes={trashedNotes}
+            showTrash={showTrash}
+            onShowTrashChange={setShowTrash}
+            selectedNoteId={selectedNote?.id || null}
+            onNoteSelect={handleNoteSelect}
+            onNoteCreate={handleNoteCreate}
+            onNoteDelete={handleNoteDelete}
+            onNoteRestore={handleNoteRestore}
+            onNotePermanentDelete={handleNotePermanentDelete}
+            onFolderCreate={handleFolderCreate}
+            onFolderRename={handleFolderRename}
+            onFolderDelete={handleFolderDelete}
+            onNoteMoveToFolder={handleNoteMoveToFolder}
+            onFolderReorder={handleFolderReorder}
+            onNoteToggleFavorite={handleNoteToggleFavorite}
+            onNoteReorder={handleNoteReorder}
+            onExportAll={handleExportAll}
+          />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={75}>
+          <NoteEditor
+            note={selectedNote}
+            onSave={handleNoteSave}
+            onLogout={handleLogout}
+            saving={saving}
+            onRestore={handleNoteSave}
+          />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };
