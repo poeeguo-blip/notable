@@ -537,9 +537,28 @@ ${notesHtml}
   }
 
   return (
-    <div className="h-screen overflow-hidden">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+    // 在 Index.tsx 中替換整個 return 語句
+return (
+  <div className="h-screen overflow-hidden flex flex-col bg-background">
+    {/* Desktop Layout - Side by side */}
+    <div className="hidden md:flex flex-1 overflow-hidden">
+      {/* Desktop Sidebar */}
+      <div className="w-1/4 border-r flex flex-col overflow-hidden">
+        {/* Header with logout */}
+        <div className="flex items-center justify-between gap-2 px-4 py-3 border-b">
+          <h1 className="text-lg font-semibold">Notes</h1>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            className="text-xs"
+          >
+            Logout
+          </Button>
+        </div>
+
+        {/* Sidebar content */}
+        <div className="flex-1 overflow-hidden">
           <NotesList
             notes={notes}
             folders={folders}
@@ -547,7 +566,7 @@ ${notesHtml}
             showTrash={showTrash}
             onShowTrashChange={setShowTrash}
             selectedNoteId={selectedNote?.id || null}
-            onNoteSelect={handleNoteSelect}
+            onNoteSelect={setSelectedNote}
             onNoteCreate={handleNoteCreate}
             onNoteDelete={handleNoteDelete}
             onNoteRestore={handleNoteRestore}
@@ -561,19 +580,120 @@ ${notesHtml}
             onNoteReorder={handleNoteReorder}
             onExportAll={handleExportAll}
           />
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75}>
-          <NoteEditor
-            note={selectedNote}
-            onSave={handleNoteSave}
-            onLogout={handleLogout}
-            saving={saving}
-            onRestore={handleNoteSave}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        </div>
+      </div>
+
+      {/* Desktop Editor */}
+      <div className="w-3/4 flex flex-col overflow-hidden">
+        {selectedNote ? (
+          <>
+            <div className="px-4 py-3 border-b bg-background h-14 flex items-center">
+              <h2 className="text-sm font-semibold flex-1 truncate">{selectedNote.title || "Untitled"}</h2>
+              {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <NoteEditor
+                note={selectedNote}
+                onSave={handleNoteSave}
+                onLogout={handleLogout}
+                saving={saving}
+                onRestore={handleNoteSave}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-muted-foreground">
+            <p>Select a note to edit</p>
+          </div>
+        )}
+      </div>
     </div>
+
+    {/* Mobile Layout - Fullscreen, either list OR editor */}
+    <div className="md:hidden flex flex-col flex-1 overflow-hidden">
+      {selectedNote ? (
+        // 📱 Mobile: Fullscreen Note Editor
+        <>
+          {/* Back header */}
+          <div className="flex items-center gap-3 px-4 py-3 border-b bg-background h-14">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 -ml-2"
+              onClick={() => setSelectedNote(null)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+            </Button>
+            <h2 className="text-sm font-semibold flex-1 truncate">{selectedNote.title || "Untitled"}</h2>
+            {saving && <span className="text-xs text-muted-foreground ml-auto">Saving...</span>}
+          </div>
+
+          {/* Fullscreen editor */}
+          <div className="flex-1 overflow-hidden">
+            <NoteEditor
+              note={selectedNote}
+              onSave={handleNoteSave}
+              onLogout={handleLogout}
+              saving={saving}
+              onRestore={handleNoteSave}
+            />
+          </div>
+        </>
+      ) : (
+        // 📱 Mobile: Notes List
+        <>
+          {/* List header */}
+          <div className="flex items-center justify-between gap-2 px-4 py-3 border-b bg-background h-14">
+            <h1 className="text-lg font-semibold">Notes</h1>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="text-xs"
+            >
+              Logout
+            </Button>
+          </div>
+
+          {/* Notes list */}
+          <div className="flex-1 overflow-hidden">
+            <NotesList
+              notes={notes}
+              folders={folders}
+              trashedNotes={trashedNotes}
+              showTrash={showTrash}
+              onShowTrashChange={setShowTrash}
+              selectedNoteId={selectedNote?.id || null}
+              onNoteSelect={setSelectedNote}
+              onNoteCreate={handleNoteCreate}
+              onNoteDelete={handleNoteDelete}
+              onNoteRestore={handleNoteRestore}
+              onNotePermanentDelete={handleNotePermanentDelete}
+              onFolderCreate={handleFolderCreate}
+              onFolderRename={handleFolderRename}
+              onFolderDelete={handleFolderDelete}
+              onNoteMoveToFolder={handleNoteMoveToFolder}
+              onFolderReorder={handleFolderReorder}
+              onNoteToggleFavorite={handleNoteToggleFavorite}
+              onNoteReorder={handleNoteReorder}
+              onExportAll={handleExportAll}
+            />
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+);
   );
 };
 
