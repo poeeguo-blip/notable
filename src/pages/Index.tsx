@@ -537,66 +537,33 @@ ${notesHtml}
   }
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
-      {/* Mobile Header with Menu Button */}
-      <div className="md:hidden flex items-center gap-2 p-4 border-b bg-background">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-        >
-          {isMobileSidebarOpen ? <X /> : <Menu />}
-        </Button>
-        <h1 className="text-lg font-semibold">Notable</h1>
+    <div className="h-screen overflow-hidden flex flex-col bg-background">
+      {/* Desktop Layout - Side by side */}
+      <div className="hidden md:flex flex-1 overflow-hidden">
+        ...（桌面版本代碼）
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar - Hidden on mobile, shown on desktop */}
-        {isMobileSidebarOpen && (
-          <div className="md:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsMobileSidebarOpen(false)} />
-        )}
-        
-        <div
-          className={`
-            transition-all duration-300 ease-out
-            md:w-auto md:relative md:bg-transparent md:shadow-none
-            ${isMobileSidebarOpen
-              ? 'fixed left-0 top-16 bottom-0 w-64 bg-background shadow-lg z-50'
-              : 'hidden md:block w-1/4'
-            }
-          `}
-        >
-          <NotesList
-            notes={notes}
-            folders={folders}
-            trashedNotes={trashedNotes}
-            showTrash={showTrash}
-            onShowTrashChange={setShowTrash}
-            selectedNoteId={selectedNote?.id || null}
-            onNoteSelect={(id) => {
-              handleNoteSelect(id);
-              setIsMobileSidebarOpen(false);
-            }}
-            onNoteCreate={handleNoteCreate}
-            onNoteDelete={handleNoteDelete}
-            onNoteRestore={handleNoteRestore}
-            onNotePermanentDelete={handleNotePermanentDelete}
-            onFolderCreate={handleFolderCreate}
-            onFolderRename={handleFolderRename}
-            onFolderDelete={handleFolderDelete}
-            onNoteMoveToFolder={handleNoteMoveToFolder}
-            onFolderReorder={handleFolderReorder}
-            onNoteToggleFavorite={handleNoteToggleFavorite}
-            onNoteReorder={handleNoteReorder}
-            onExportAll={handleExportAll}
-          />
-        </div>
-
-        {/* Note Editor - Full width on mobile, 75% on desktop */}
-        <div className="hidden md:flex flex-1 border-l">
-          <ResizablePanelGroup direction="horizontal" className="w-full">
-            <ResizablePanel defaultSize={100} minSize={50}>
+      {/* Mobile Layout - Fullscreen Note Editor */}
+      <div className="md:hidden flex flex-col flex-1 overflow-hidden">
+        {selectedNote ? (
+          <>
+            {/* Mobile Header - Only when viewing note */}
+            <div className="flex items-center gap-2 px-3 py-3 border-b bg-background h-14">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setSelectedNote(null)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+              </Button>
+              <h2 className="text-sm font-semibold flex-1 truncate">{selectedNote.title || "Untitled"}</h2>
+            </div>
+            
+            {/* Fullscreen Note Editor */}
+            <div className="flex-1 overflow-hidden">
               <NoteEditor
                 note={selectedNote}
                 onSave={handleNoteSave}
@@ -604,20 +571,41 @@ ${notesHtml}
                 saving={saving}
                 onRestore={handleNoteSave}
               />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </div>
-
-        {/* Mobile Note Editor - Full width */}
-        <div className="md:hidden flex-1 border-l">
-          <NoteEditor
-            note={selectedNote}
-            onSave={handleNoteSave}
-            onLogout={handleLogout}
-            saving={saving}
-            onRestore={handleNoteSave}
-          />
-        </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Mobile List View Header */}
+            <div className="flex items-center gap-2 px-3 py-3 border-b bg-background h-14">
+              <h1 className="text-lg font-semibold">Notes</h1>
+            </div>
+            
+            {/* Notes List */}
+            <div className="flex-1 overflow-hidden">
+              <NotesList
+                notes={notes}
+                folders={folders}
+                trashedNotes={trashedNotes}
+                showTrash={showTrash}
+                onShowTrashChange={setShowTrash}
+                selectedNoteId={selectedNote?.id || null}
+                onNoteSelect={setSelectedNote}
+                onNoteCreate={handleNoteCreate}
+                onNoteDelete={handleNoteDelete}
+                onNoteRestore={handleNoteRestore}
+                onNotePermanentDelete={handleNotePermanentDelete}
+                onFolderCreate={handleFolderCreate}
+                onFolderRename={handleFolderRename}
+                onFolderDelete={handleFolderDelete}
+                onNoteMoveToFolder={handleNoteMoveToFolder}
+                onFolderReorder={handleFolderReorder}
+                onNoteToggleFavorite={handleNoteToggleFavorite}
+                onNoteReorder={handleNoteReorder}
+                onExportAll={handleExportAll}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
