@@ -6,6 +6,8 @@ import { User, Session } from "@supabase/supabase-js";
 import { NotesList } from "@/components/NotesList";
 import { NoteEditor } from "@/components/NoteEditor";
 import { useToast } from "@/hooks/use-toast";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Note {
   id: string;
