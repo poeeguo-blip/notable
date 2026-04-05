@@ -543,9 +543,9 @@ return (
     {/* Desktop Layout - Side by side */}
     <div className="hidden md:flex flex-1 overflow-hidden">
       {/* Desktop Sidebar */}
-      <div className="w-1/4 border-r flex flex-col overflow-hidden">
-        {/* Header with logout */}
-        <div className="flex items-center justify-between gap-2 px-4 py-3 border-b">
+      <div className="w-1/4 border-r flex flex-col overflow-hidden bg-background">
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between gap-2 px-4 py-3 border-b bg-background">
           <h1 className="text-lg font-semibold">Notes</h1>
           <Button
             variant="ghost"
@@ -557,8 +557,8 @@ return (
           </Button>
         </div>
 
-        {/* Sidebar content */}
-        <div className="flex-1 overflow-hidden">
+        {/* Sidebar Content */}
+        <div className="flex-1 overflow-auto">
           <NotesList
             notes={notes}
             folders={folders}
@@ -587,8 +587,8 @@ return (
       <div className="w-3/4 flex flex-col overflow-hidden">
         {selectedNote ? (
           <>
-            <div className="px-4 py-3 border-b bg-background h-14 flex items-center">
-              <h2 className="text-sm font-semibold flex-1 truncate">{selectedNote.title || "Untitled"}</h2>
+            <div className="px-4 py-3 border-b bg-background h-14 flex items-center justify-between">
+              <h2 className="text-sm font-semibold truncate">{selectedNote.title || "Untitled"}</h2>
               {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
             </div>
             <div className="flex-1 overflow-hidden">
@@ -612,15 +612,16 @@ return (
     {/* Mobile Layout - Fullscreen, either list OR editor */}
     <div className="md:hidden flex flex-col flex-1 overflow-hidden">
       {selectedNote ? (
-        // 📱 Mobile: Fullscreen Note Editor
+        // Mobile: Fullscreen Note Editor
         <>
-          {/* Back header */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b bg-background h-14">
+          {/* Mobile Header with Back Button */}
+          <div className="flex items-center gap-3 px-3 py-3 border-b bg-background h-14">
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 -ml-2"
+              className="h-8 w-8"
               onClick={() => setSelectedNote(null)}
+              title="Back to notes list"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -630,15 +631,17 @@ return (
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </Button>
             <h2 className="text-sm font-semibold flex-1 truncate">{selectedNote.title || "Untitled"}</h2>
-            {saving && <span className="text-xs text-muted-foreground ml-auto">Saving...</span>}
+            {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
           </div>
 
-          {/* Fullscreen editor */}
+          {/* Fullscreen Note Editor */}
           <div className="flex-1 overflow-hidden">
             <NoteEditor
               note={selectedNote}
@@ -650,9 +653,9 @@ return (
           </div>
         </>
       ) : (
-        // 📱 Mobile: Notes List
+        // Mobile: Notes List
         <>
-          {/* List header */}
+          {/* Mobile Header */}
           <div className="flex items-center justify-between gap-2 px-4 py-3 border-b bg-background h-14">
             <h1 className="text-lg font-semibold">Notes</h1>
             <Button
@@ -665,7 +668,7 @@ return (
             </Button>
           </div>
 
-          {/* Notes list */}
+          {/* Notes List */}
           <div className="flex-1 overflow-hidden">
             <NotesList
               notes={notes}
@@ -693,6 +696,7 @@ return (
       )}
     </div>
   </div>
+);
 );
   );
 };
