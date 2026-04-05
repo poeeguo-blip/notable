@@ -537,9 +537,36 @@ ${notesHtml}
   }
 
   return (
-    <div className="h-screen overflow-hidden">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+    <div className="h-screen overflow-hidden flex flex-col">
+      {/* Mobile Header with Menu Button */}
+      <div className="md:hidden flex items-center gap-2 p-4 border-b bg-background">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        >
+          {isMobileSidebarOpen ? <X /> : <Menu />}
+        </Button>
+        <h1 className="text-lg font-semibold">Notable</h1>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar - Hidden on mobile, shown on desktop */}
+        {isMobileSidebarOpen && (
+          <div className="md:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsMobileSidebarOpen(false)} />
+        )}
+        
+        <div
+          className={`
+            transition-all duration-300 ease-out
+            md:w-auto md:relative md:bg-transparent md:shadow-none
+            ${isMobileSidebarOpen
+              ? 'fixed left-0 top-16 bottom-0 w-64 bg-background shadow-lg z-50'
+              : 'hidden md:block w-1/4'
+            }
+          `}
+        >
           <NotesList
             notes={notes}
             folders={folders}
@@ -547,7 +574,10 @@ ${notesHtml}
             showTrash={showTrash}
             onShowTrashChange={setShowTrash}
             selectedNoteId={selectedNote?.id || null}
-            onNoteSelect={handleNoteSelect}
+            onNoteSelect={(id) => {
+              handleNoteSelect(id);
+              setIsMobileSidebarOpen(false);
+            }}
             onNoteCreate={handleNoteCreate}
             onNoteDelete={handleNoteDelete}
             onNoteRestore={handleNoteRestore}
@@ -561,9 +591,25 @@ ${notesHtml}
             onNoteReorder={handleNoteReorder}
             onExportAll={handleExportAll}
           />
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75}>
+        </div>
+
+        {/* Note Editor - Full width on mobile, 75% on desktop */}
+        <div className="hidden md:flex flex-1 border-l">
+          <ResizablePanelGroup direction="horizontal" className="w-full">
+            <ResizablePanel defaultSize={100} minSize={50}>
+              <NoteEditor
+                note={selectedNote}
+                onSave={handleNoteSave}
+                onLogout={handleLogout}
+                saving={saving}
+                onRestore={handleNoteSave}
+              />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
+
+        {/* Mobile Note Editor - Full width */}
+        <div className="md:hidden flex-1 border-l">
           <NoteEditor
             note={selectedNote}
             onSave={handleNoteSave}
@@ -571,8 +617,8 @@ ${notesHtml}
             saving={saving}
             onRestore={handleNoteSave}
           />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        </div>
+      </div>
     </div>
   );
 };
